@@ -221,7 +221,15 @@ class CloudRunTarget(DeployTarget):
             raise DeployError(f"{spec.service} has no ready revision")
 
         weight = max(0, min(100, int(weight)))
-        others = [name for name, _ in serving(service) if name != latest]
+        others = [name for name, _ in serving(service) if name != latest] or [
+            name
+            for name in (
+                short(str(r.get("name")))
+                for r in parts.services.revisions(spec)
+                if ready(r)
+            )
+            if name != latest
+        ]
 
         if weight < 100 and not others:
             raise DeployError(
