@@ -1,0 +1,13 @@
+[project]
+name = "apx-gcp-cloud-run"
+type = "library"
+language = "python"
+ci = "github"
+
+[source_host]
+kind = "github"
+repo = "actionplatform/apx-gcp-cloud-run"
+
+[release]
+strategy = "semver"
+changelog = "conventional"
