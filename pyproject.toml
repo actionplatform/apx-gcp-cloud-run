@@ -1,0 +1,38 @@
+[project]
+name = "apx-gcp-cloud-run"
+version = "0.0.0"
+description = "Google Cloud Run for Action Platform: the gcp/cloud-run deploy target, keyless through Workload Identity Federation, with its overlay and connect script."
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.11"
+authors = [{ name = "Action Platform", email = "cloud@actionplatform.io" }]
+dependencies = ["action-platform>=0.33"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.6", "action-platform[mcp]"]
+
+[project.entry-points."action_platform.plugins"]
+gcp-cloud-run = "apx_gcp_cloud_run:GcpCloudRunPlugin"
+
+[project.entry-points."action_platform.deploy_target"]
+"gcp/cloud-run" = "apx_gcp_cloud_run.target:CloudRunTarget"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["apx_gcp_cloud_run*"]
+
+[tool.setuptools.package-data]
+apx_gcp_cloud_run = ["overlays/**/*", "overlays/**/.*", "overlays/**/.github/workflows/*", "connect/*.sh"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 88
+extend-exclude = ["apx_gcp_cloud_run/overlays"]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]
