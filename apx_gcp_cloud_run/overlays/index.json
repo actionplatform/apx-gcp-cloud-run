@@ -1,0 +1,10 @@
+{
+  "clouds": [
+    {
+      "id": "gcp/cloud-run",
+      "description": "Docker image pushed to Artifact Registry by the CI on every release, run by Google Cloud Run",
+      "types": ["web"],
+      "languages": ["python", "node", "go", "java", "kotlin", "ruby"]
+    }
+  ]
+}
