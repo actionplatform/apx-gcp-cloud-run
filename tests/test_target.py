@@ -226,6 +226,26 @@ class TargetTest(Base):
 
         self.assertTrue(target.verify("1.1.0", "dev"))
 
+    def test_switch_traffic_right_after_a_deploy_canaries_the_new_revision(self):
+        google = FakeGoogle()
+        target = FakeTarget(google)
+        target.deploy(self.ctx(version="1.0.0"))
+        target.deploy(self.ctx(version="1.1.0"))
+
+        target.switch_traffic(self.ctx(), 10)
+
+        self.assertEqual(
+            [
+                (t["revision"], t["percent"])
+                for t in google.services[SERVICE]["traffic"]
+            ],
+            [
+                ("ap-acme-shop-orders-dev-00002-xyz", 10),
+                ("ap-acme-shop-orders-dev-00001-xyz", 90),
+            ],
+        )
+        self.assertTrue(target.verify("1.0.0", "dev"))
+
     def test_switch_traffic_needs_a_second_revision_below_100(self):
         target = FakeTarget(FakeGoogle())
         target.deploy(self.ctx())
